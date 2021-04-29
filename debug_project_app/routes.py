@@ -14,13 +14,13 @@ from flask_login import login_required,login_user, current_user,logout_user
 @app.route('/')
 def home():
     posts = Post.query.all
-    returnrender_template("homes.html", posts = posts)
+    return render_template('home.html', post = posts)
 
 # Register Route
 @app.route('/register', methods=['GET','POST'])
 def register():
     form = UserInfoForm()
-    if request.method = 'POST' and form.validate():
+    if request.method == 'POST' and form.validate(): # should be ==
         # Get Information
         username = form.username.data
         password = form.password.data
