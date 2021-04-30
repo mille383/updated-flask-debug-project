@@ -1,4 +1,4 @@
-from debug_project_app import app, Message, mail
+from debug_project_app import app, Message, mail, db
 from flask import render_template, request, redirect, url_for
 
 # Import for Forms
@@ -22,9 +22,9 @@ def register():
     form = UserInfoForm()
     if request.method == 'POST' and form.validate(): # should be ==
         # Get Information
-        username = form.username.data
-        password = form.password.data
-        email = form.email
+        username = str(form.username.data)
+        password = str(form.password.data)
+        email = str(form.email.data)
         print("\n",username,password,email)
         # Create an instance of User
         user = User(username,email,password)
@@ -41,7 +41,7 @@ def register():
 @app.route('/posts', methods=['GET','POST'])
 @login_required
 def posts():
-    post = PostForm
+    post = PostForm()
     if request.method == 'POST' and post.validate():
         title = post.title.data
         content = post.content.data
@@ -49,8 +49,8 @@ def posts():
         print('\n',title,content)
         post = Post(title,content,user_id)
 
-        db.session.add(post,posts)
-
+        # db.session.add(post,posts)
+        db.session.add(post)
         db.session.commit()
         return redirect(url_for('posts'))
     return render_template('posts.html', post = post)
