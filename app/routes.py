@@ -1,11 +1,11 @@
-from debug_project_app import app, Message, mail, db
+from app import app, Message, mail, db
 from flask import render_template, request, redirect, url_for
 
 # Import for Forms
-from debug_project_app.forms import UserInfoForm, PostForm, LoginForm
+from app.forms import UserInfoForm, PostForm, LoginForm
 
 # Import for Models
-from debug_project_app.models import User, Post, check_password_hash
+from app.models import User, Post, check_password_hash
 
 # Import for Flask Login - login_required, login_user,current_user, logout_user
 from flask_login import login_required,login_user, current_user,logout_user
@@ -13,8 +13,8 @@ from flask_login import login_required,login_user, current_user,logout_user
 # Home Route
 @app.route('/')
 def home():
-    posts = Post.query.all
-    return render_template('home.html', post = posts)
+    posts = Post.query.all()
+    return render_template('home.html', posts = posts)
 
 # Register Route
 @app.route('/register', methods=['GET','POST'])
@@ -45,7 +45,7 @@ def posts():
     if request.method == 'POST' and post.validate():
         title = post.title.data
         content = post.content.data
-        user_id = current_user
+        user_id = current_user.id
         print('\n',title,content)
         post = Post(title,content,user_id)
 
